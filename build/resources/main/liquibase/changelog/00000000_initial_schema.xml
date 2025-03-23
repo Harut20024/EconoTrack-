@@ -29,7 +29,7 @@
             <column name="currency" type="VARCHAR(3)">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="rate" type="DOUBLE(255)">
+            <column name="rate" type="NUMERIC(15,6)">
                 <constraints nullable="false"/>
             </column>
             <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
@@ -63,7 +63,7 @@
             <column name="diff_of_inflation" type="numeric(10,2)">
                 <constraints nullable="true"/>
             </column>
-            <column name="diff_of_trade" type="numeric(15,2)">
+            <column name="diff_of_trade" type="BIGINT">
                 <constraints nullable="true"/>
             </column>
             <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
