@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <springProfile name="local">
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+  </springProfile>
+  <springProfile name="dev,rnd,ldt">
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+        <providers>
+          <timestamp>
+            <fieldName>timestamp</fieldName>
+          </timestamp>
+          <loggerName/>
+          <logLevel>
+            <fieldName>log_level</fieldName>
+          </logLevel>
+          <threadName/>
+          <message/>
+          <stackTrace/>
+          <mdc>
+            <fieldName>mdc</fieldName>
+          </mdc>
+        </providers>
+      </encoder>
+    </appender>
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+  </springProfile>
+</configuration>

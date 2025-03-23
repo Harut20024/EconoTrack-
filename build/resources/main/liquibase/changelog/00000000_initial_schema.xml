@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="1" author="harut.tarzyan">
+        <createTable tableName="user">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="login" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="currency_exchange_rate">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="currency" type="VARCHAR(3)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="rate" type="DOUBLE(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="harut.tarzyan">
+        <createTable tableName="evaluate_country">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="country" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="gdp" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="month_salary" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="population" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="diff_of_population" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="population_with_education" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="diff_of_inflation" type="numeric(10,2)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="diff_of_trade" type="numeric(10,2)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

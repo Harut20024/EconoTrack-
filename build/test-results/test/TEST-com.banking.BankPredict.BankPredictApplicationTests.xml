@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.banking.BankPredict.BankPredictApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-03-12T18:06:51" hostname="user920-ThinkPad-T14-Gen-2i" time="1.027">
+  <properties/>
+  <testcase name="contextLoads()" classname="com.banking.BankPredict.BankPredictApplicationTests" time="1.027"/>
+  <system-out><![CDATA[22:06:41.997 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.banking.BankPredict.BankPredictApplicationTests]: BankPredictApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+22:06:42.185 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.banking.BankPredict.BankPredictApplication for test class com.banking.BankPredict.BankPredictApplicationTests
+]]></system-out>
+  <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (/home/user920/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.14.12/be4984cb6fd1ef1d11f218a648889dfda44b8a15/byte-buddy-agent-1.14.12.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>
