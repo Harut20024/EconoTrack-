@@ -63,7 +63,7 @@
             <column name="diff_of_inflation" type="numeric(10,2)">
                 <constraints nullable="true"/>
             </column>
-            <column name="diff_of_trade" type="numeric(10,2)">
+            <column name="diff_of_trade" type="numeric(15,2)">
                 <constraints nullable="true"/>
             </column>
             <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">

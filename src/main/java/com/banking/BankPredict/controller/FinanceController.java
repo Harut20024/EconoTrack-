@@ -3,10 +3,10 @@ package com.banking.BankPredict.controller;
 import com.banking.BankPredict.client.ExchangeRestClientProxy;
 import com.banking.BankPredict.client.WorldBankClientProxy;
 import com.banking.BankPredict.model.EcoTrackResult;
+import com.banking.BankPredict.model.EvaluateCountry;
 import com.banking.BankPredict.model.User;
-import com.banking.BankPredict.model.WorldBankResponse;
+import com.banking.BankPredict.service.EvaluateCountryService;
 import com.banking.BankPredict.service.UserService;
-import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +20,14 @@ import java.util.List;
 public class FinanceController {
 
     private final ExchangeRestClientProxy exchangeRestClientProxy;
+    private final EvaluateCountryService evaluateCountryService;
     private final WorldBankClientProxy worldBankClientProxy;
     private final UserService userService;
+
+    @PostMapping("/evaluateCountry")
+    public ResponseEntity<EvaluateCountry> getEvaluateCountry(@RequestParam String countryName) {
+        return ResponseEntity.ok(evaluateCountryService.getEvaluateCountry(countryName));
+    }
 
     @PostMapping("/ecoTrack")
     public ResponseEntity<List<EcoTrackResult>> ecoTrack(@RequestParam String countryName, @RequestParam String date, @RequestParam String exchangeCode) {
@@ -39,6 +45,7 @@ public class FinanceController {
         User savedUser = userService.loginUser(email, password);
         return ResponseEntity.ok(savedUser);
     }
+
     @PostMapping("/updateExchangeRate")
     public ResponseEntity<String> updateExchangeRate() {
         exchangeRestClientProxy.updateExchange();

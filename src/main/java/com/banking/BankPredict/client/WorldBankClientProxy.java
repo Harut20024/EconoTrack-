@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Profile("!test")
@@ -43,20 +44,49 @@ public class WorldBankClientProxy {
 
     @Nonnull
     public List<EcoTrackResult> getEcoTrack(@Nonnull String countryName, @Nonnull String date, @Nonnull String exchangeCode) {
-        return List.of(
-                new EcoTrackResult("GDP", getGDP(countryName, date, exchangeCode)),
-                new EcoTrackResult("gdpPerCapita", getGDPPerCapita(countryName, date, exchangeCode)),
-                new EcoTrackResult("popularity", getPopularity(countryName, date, exchangeCode)),
-                new EcoTrackResult("urbanPopulation", getUrbanPopulation(countryName, date, exchangeCode)),
-                new EcoTrackResult("ruralPopulation", getRuralPopulation(countryName, date, exchangeCode)),
-                new EcoTrackResult("urbanGrowth", getUrbanGrowth(countryName, date, exchangeCode)),
-                new EcoTrackResult("ruralGrowth", getRuralGrowth(countryName, date, exchangeCode)),
-                new EcoTrackResult("populationWithoutEducation", getPopulationWithEducation(countryName, date, exchangeCode)),
-                new EcoTrackResult("tradeInServices", getTradeInServices(countryName, date, exchangeCode)),
-                new EcoTrackResult("importsOfTrade", getImportsOfTrade(countryName, date, exchangeCode)),
-                new EcoTrackResult("exportsOfTrade", getExportsOfTrade(countryName, date, exchangeCode)),
-                new EcoTrackResult("infection", getInfection(countryName, date, exchangeCode))
+        List<EcoTrackResult> results = new ArrayList<>();
+
+
+        List<WorldBankResponse> gdp = Optional.of(getGDP(countryName, date, exchangeCode)).orElse(List.of());
+        List<WorldBankResponse> gdpPerCapita = Optional.of(getGDPPerCapita(countryName, date, exchangeCode)).orElse(List.of());
+        List<WorldBankResponse> popularity = Optional.of(getPopularity(countryName, date, exchangeCode)).orElse(List.of());
+        List<WorldBankResponse> urbanPopulation = Optional.of(getUrbanPopulation(countryName, date, exchangeCode)).orElse(List.of());
+        List<WorldBankResponse> ruralPopulation = Optional.of(getRuralPopulation(countryName, date, exchangeCode)).orElse(List.of());
+        List<WorldBankResponse> urbanGrowth = Optional.of(getUrbanGrowth(countryName, date, exchangeCode)).orElse(List.of());
+        List<WorldBankResponse> ruralGrowth = Optional.of(getRuralGrowth(countryName, date, exchangeCode)).orElse(List.of());
+        List<WorldBankResponse> populationWithoutEducation = Optional.of(getPopulationWithEducation(countryName, date, exchangeCode)).orElse(List.of());
+        List<WorldBankResponse> tradeInServices = Optional.of(getTradeInServices(countryName, date, exchangeCode)).orElse(List.of());
+        List<WorldBankResponse> importsOfTrade = Optional.of(getImportsOfTrade(countryName, date, exchangeCode)).orElse(List.of());
+        List<WorldBankResponse> exportsOfTrade = Optional.of(getExportsOfTrade(countryName, date, exchangeCode)).orElse(List.of());
+        List<WorldBankResponse> infection = Optional.of(getInfection(countryName, date, exchangeCode)).orElse(List.of());
+
+        evaluateCountryService.saveOrUpdateEvaluateCountry(
+                countryName,
+                gdp,
+                gdpPerCapita,
+                popularity,
+                urbanPopulation,
+                ruralPopulation,
+                populationWithoutEducation,
+                importsOfTrade,
+                exportsOfTrade,
+                infection
         );
+
+        results.add(new EcoTrackResult("GDP", gdp));
+        results.add(new EcoTrackResult("gdpPerCapita", gdpPerCapita));
+        results.add(new EcoTrackResult("popularity", popularity));
+        results.add(new EcoTrackResult("urbanPopulation", urbanPopulation));
+        results.add(new EcoTrackResult("ruralPopulation", ruralPopulation));
+        results.add(new EcoTrackResult("urbanGrowth", urbanGrowth));
+        results.add(new EcoTrackResult("ruralGrowth", ruralGrowth));
+        results.add(new EcoTrackResult("populationWithoutEducation", populationWithoutEducation));
+        results.add(new EcoTrackResult("tradeInServices", tradeInServices));
+        results.add(new EcoTrackResult("importsOfTrade", importsOfTrade));
+        results.add(new EcoTrackResult("exportsOfTrade", exportsOfTrade));
+        results.add(new EcoTrackResult("infection", infection));
+
+        return results;
     }
 
 
