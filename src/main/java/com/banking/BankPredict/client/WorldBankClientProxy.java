@@ -1,5 +1,6 @@
 package com.banking.BankPredict.client;
 
+import com.banking.BankPredict.model.EcoTrackResult;
 import com.banking.BankPredict.model.WorldBankResponse;
 import com.banking.BankPredict.repository.CurrencyExchangeRateRepository;
 import com.banking.BankPredict.service.EvaluateCountryService;
@@ -39,6 +40,25 @@ public class WorldBankClientProxy {
         this.evaluateCountryService = evaluateCountry;
         this.currencyExchangeRateRepository = currencyExchangeRateRepository;
     }
+
+    @Nonnull
+    public List<EcoTrackResult> getEcoTrack(@Nonnull String countryName, @Nonnull String date, @Nonnull String exchangeCode) {
+        return List.of(
+                new EcoTrackResult("GDP", getGDP(countryName, date, exchangeCode)),
+                new EcoTrackResult("gdpPerCapita", getGDPPerCapita(countryName, date, exchangeCode)),
+                new EcoTrackResult("popularity", getPopularity(countryName, date, exchangeCode)),
+                new EcoTrackResult("urbanPopulation", getUrbanPopulation(countryName, date, exchangeCode)),
+                new EcoTrackResult("ruralPopulation", getRuralPopulation(countryName, date, exchangeCode)),
+                new EcoTrackResult("urbanGrowth", getUrbanGrowth(countryName, date, exchangeCode)),
+                new EcoTrackResult("ruralGrowth", getRuralGrowth(countryName, date, exchangeCode)),
+                new EcoTrackResult("populationWithoutEducation", getPopulationWithEducation(countryName, date, exchangeCode)),
+                new EcoTrackResult("tradeInServices", getTradeInServices(countryName, date, exchangeCode)),
+                new EcoTrackResult("importsOfTrade", getImportsOfTrade(countryName, date, exchangeCode)),
+                new EcoTrackResult("exportsOfTrade", getExportsOfTrade(countryName, date, exchangeCode)),
+                new EcoTrackResult("infection", getInfection(countryName, date, exchangeCode))
+        );
+    }
+
 
     @Nonnull
     public List<WorldBankResponse> getGDP(@Nonnull String countryName, @Nonnull String date, @Nonnull String exchangeCode) {
@@ -149,6 +169,18 @@ public class WorldBankClientProxy {
     }
 
     @Nonnull
+    public List<WorldBankResponse> getRuralGrowth(@Nonnull String countryName, @Nonnull String date, @Nonnull String exchangeCode) {
+        String jsonResponse = Optional.ofNullable(
+                this.restClient.get()
+                        .uri("/country/" + countryName + "/indicator/SP.RUR.TOTL.ZG?date=" + date + "&format=json")
+                        .retrieve()
+                        .body(String.class)
+        ).orElseThrow(() -> new IllegalArgumentException("No suitable rural growth data available"));
+
+        return parseGDPData(jsonResponse, exchangeCode);
+    }
+
+    @Nonnull
     public List<WorldBankResponse> getUrbanPopulation(@Nonnull String countryName, @Nonnull String date, @Nonnull String exchangeCode) {
         String jsonResponse = Optional.ofNullable(
                 this.restClient.get()
@@ -156,42 +188,6 @@ public class WorldBankClientProxy {
                         .retrieve()
                         .body(String.class)
         ).orElseThrow(() -> new IllegalArgumentException("No suitable urban population data available"));
-
-        return parseGDPData(jsonResponse, exchangeCode);
-    }
-
-    @Nonnull
-    public List<WorldBankResponse> getUrbanPovertyGap(@Nonnull String countryName, @Nonnull String date, @Nonnull String exchangeCode) {
-        String jsonResponse = Optional.ofNullable(
-                this.restClient.get()
-                        .uri("/country/" + countryName + "/indicator/SI.POV.URGP?date=" + date + "&format=json")
-                        .retrieve()
-                        .body(String.class)
-        ).orElseThrow(() -> new IllegalArgumentException("No suitable urban poverty gap data available"));
-
-        return parseGDPData(jsonResponse, exchangeCode);
-    }
-
-    @Nonnull
-    public List<WorldBankResponse> getPopulationDensity(@Nonnull String countryName, @Nonnull String date, @Nonnull String exchangeCode) {
-        String jsonResponse = Optional.ofNullable(
-                this.restClient.get()
-                        .uri("/country/" + countryName + "/indicator/EN.POP.DNST?date=" + date + "&format=json")
-                        .retrieve()
-                        .body(String.class)
-        ).orElseThrow(() -> new IllegalArgumentException("No suitable population density data available"));
-
-        return parseGDPData(jsonResponse, exchangeCode);
-    }
-
-    @Nonnull
-    public List<WorldBankResponse> getRuralPovertyRate(@Nonnull String countryName, @Nonnull String date, @Nonnull String exchangeCode) {
-        String jsonResponse = Optional.ofNullable(
-                this.restClient.get()
-                        .uri("/country/" + countryName + "/indicator/SI.POV.RUHC?date=" + date + "&format=json")
-                        .retrieve()
-                        .body(String.class)
-        ).orElseThrow(() -> new IllegalArgumentException("No suitable rural poverty rate data available"));
 
         return parseGDPData(jsonResponse, exchangeCode);
     }
@@ -208,17 +204,6 @@ public class WorldBankClientProxy {
         return parseGDPData(jsonResponse, exchangeCode);
     }
 
-    @Nonnull
-    public List<WorldBankResponse> getRuralPopulationPercentage(@Nonnull String countryName, @Nonnull String date, @Nonnull String exchangeCode) {
-        String jsonResponse = Optional.ofNullable(
-                this.restClient.get()
-                        .uri("/country/" + countryName + "/indicator/SP.RUR.TOTL.ZS?date=" + date + "&format=json")
-                        .retrieve()
-                        .body(String.class)
-        ).orElseThrow(() -> new IllegalArgumentException("No suitable rural population percentage data available"));
-
-        return parseGDPData(jsonResponse, exchangeCode);
-    }
 
     private List<WorldBankResponse> parseGDPData(String jsonResponse, String exchangeCode) {
         List<WorldBankResponse> gdpList = new ArrayList<>();
